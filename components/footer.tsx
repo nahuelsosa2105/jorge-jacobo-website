@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Footer() {
   return (
@@ -37,7 +38,7 @@ export default function Footer() {
 
         <div>
           <h3 className="mb-4 text-lg font-semibold">CONTACTO</h3>
-          <p className="text-sm text-muted-foreground">351-4245041</p>
+          <p className="text-sm text-muted-foreground">351-3804567</p>
         </div>
 
         <div>
@@ -49,7 +50,12 @@ export default function Footer() {
 
       <div className="container mt-8 flex flex-col items-center justify-between gap-4 md:flex-row">
         <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Jorge Jacobo E Hijos S.A.</p>
-        <p className="text-sm text-muted-foreground">Diseñado por Aria Code</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-muted-foreground">Diseñado por Arai Code</p>
+          <div className="relative h-6 w-6 overflow-hidden">
+            <Image src="/ARIA-CODE-LOGO.png" alt="Aria Code Logo" fill className="object-contain" />
+          </div>
+        </div>
       </div>
     </footer>
   )

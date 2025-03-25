@@ -43,7 +43,16 @@ export default function WholesalePage() {
             <p className="text-lg mb-4">
               Para hacer tu pedido como mayorista te redirigiremos a WhatsApp para poder continuar:
             </p>
-            <Button size="lg" className="w-full sm:w-auto">
+            <Button
+              size="lg"
+              className="w-full sm:w-auto"
+              onClick={() => {
+                const whatsappNumber = "+543513804567"
+                const whatsappMessage = "Hola, me gustaría obtener información sobre compras mayoristas."
+                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
+                window.open(whatsappUrl, "_blank")
+              }}
+            >
               Contactar por WhatsApp
             </Button>
           </div>
@@ -114,20 +123,20 @@ export default function WholesalePage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="relative h-48 rounded-lg overflow-hidden">
                 <Image
-                  src="/placeholder.svg?height=400&width=400"
+                  src="/bordado.jpg"
                   alt="Personalización 1"
                   fill
                   className="object-cover"
                 />
               </div>
-              <div className="relative h-48 rounded-lg overflow-hidden">
+              {/* <div className="relative h-48 rounded-lg overflow-hidden">
                 <Image
                   src="/placeholder.svg?height=400&width=400"
                   alt="Personalización 2"
                   fill
                   className="object-cover"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
 
