@@ -1,34 +1,32 @@
-import Link from "next/link"
+"use client"
+
+import { Suspense } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ProductCard } from "@/components/product-card"
+import { ProductFilters } from "@/components/product-filters"
+import { getProducts, getAllBrands, getAllSizes } from "@/lib/products"
+import type { ProductCategory, ProductFilter } from "@/app/types/products"
 
 // Categorías de productos
-const categories = [
+const categories: { id: ProductCategory; name: string }[] = [
   {
-    id: "calzado",
-    name: "CALZADO",
-    image: "/placeholder.svg?height=400&width=400",
+    id: "calzados",
+    name: "CALZADOS",
   },
   {
     id: "trabajo",
     name: "TRABAJO",
-    image: "/placeholder.svg?height=400&width=400",
   },
   {
-    id: "accesorios",
-    name: "ACCESORIOS",
-    image: "/placeholder.svg?height=400&width=400",
+    id: "campo",
+    name: "CAMPO",
   },
   {
     id: "seguridad",
     name: "SEGURIDAD",
-    image: "/placeholder.svg?height=400&width=400",
-  },
-  {
-    id: "mujer",
-    name: "MUJER",
-    image: "/placeholder.svg?height=400&width=400",
   },
 ]
 
@@ -51,120 +49,248 @@ const brands = [
   },
 ]
 
-export default function RetailPage() {
+export default function RetailPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  // Preparar los filtros desde los parámetros de búsqueda
+  const filters: ProductFilter = {}
+
+  // Categorías
+  if (searchParams.category) {
+    filters.category = Array.isArray(searchParams.category)
+      ? (searchParams.category as ProductCategory[])
+      : [searchParams.category as ProductCategory]
+  }
+
+  // Marcas
+  if (searchParams.brand) {
+    filters.brand = Array.isArray(searchParams.brand) ? searchParams.brand : [searchParams.brand]
+  }
+
+  // Tallas
+  if (searchParams.size) {
+    filters.size = Array.isArray(searchParams.size) ? searchParams.size : [searchParams.size]
+  }
+
+  // Precio mínimo
+  if (searchParams.minPrice && typeof searchParams.minPrice === "string") {
+    filters.minPrice = Number.parseInt(searchParams.minPrice)
+  }
+
+  // Precio máximo
+  if (searchParams.maxPrice && typeof searchParams.maxPrice === "string") {
+    filters.maxPrice = Number.parseInt(searchParams.maxPrice)
+  }
+
+  // Obtener la página actual
+  const page = searchParams.page && typeof searchParams.page === "string" ? Number.parseInt(searchParams.page) : 1
+
+  // Obtener el orden
+  const sort = searchParams.sort && typeof searchParams.sort === "string" ? searchParams.sort : "newest"
+
+  // Obtener todas las marcas y tallas disponibles
+  const availableBrands = getAllBrands()
+  const availableSizes = getAllSizes()
+
   return (
     <div className="container py-12">
       <h1 className="text-4xl font-bold mb-12">TIENDA MINORISTA</h1>
 
-      {/* Categorías */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-semibold mb-8">PRODUCTOS</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {categories.map((category) => (
-            <Card key={category.id} className="overflow-hidden">
-              <div className="relative h-48">
-                <Image
-                  src={category.image || "/placeholder.svg"}
-                  alt={category.name}
-                  fill
-                  className="object-cover transition-transform hover:scale-105"
-                />
-              </div>
-              <CardContent className="p-4">
-                <Link href={`/productos/${category.id}`} className="text-lg font-semibold hover:underline">
-                  {category.name}
-                </Link>
-              </CardContent>
-            </Card>
-          ))}
+      <div className="grid gap-8 md:grid-cols-[250px_1fr]">
+        {/* Sidebar con filtros */}
+        <div>
+          <ProductFilters
+            categories={categories}
+            brands={availableBrands}
+            sizes={availableSizes}
+            initialFilters={filters}
+          />
         </div>
-      </section>
 
-      {/* Productos destacados */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-semibold mb-8">PRODUCTOS DESTACADOS</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <Card key={index} className="overflow-hidden">
-              <div className="relative h-64">
-                <Image
-                  src="/placeholder.svg?height=400&width=400"
-                  alt={`Producto destacado ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <CardContent className="p-4">
-                <h3 className="font-semibold">Camisa STD de Trabajo</h3>
-                <p className="text-sm text-muted-foreground">Manga Larga</p>
-                <Button variant="outline" className="w-full mt-4">
-                  VER MÁS
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
+        {/* Contenido principal */}
+        <div className="space-y-8">
+          {/* Productos */}
+          <Suspense fallback={<ProductsGridSkeleton />}>
+            <ProductsGrid filters={filters} page={page} sort={sort} />
+          </Suspense>
 
-      {/* Marcas */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-semibold mb-8">NUESTRAS MARCAS</h2>
-        <div className="flex flex-wrap justify-center gap-8">
-          {brands.map((brand) => (
-            <div key={brand.id} className="bg-muted p-6 rounded-lg">
-              <Image
-                src={brand.image || "/placeholder.svg"}
-                alt={brand.name}
-                width={150}
-                height={75}
-                className="object-contain"
-              />
+          {/* Marcas */}
+          <section className="mt-16">
+            <h2 className="text-2xl font-semibold mb-8">NUESTRAS MARCAS</h2>
+            <div className="flex flex-wrap justify-center gap-8">
+              {brands.map((brand) => (
+                <div key={brand.id} className="bg-muted p-6 rounded-lg">
+                  <Image
+                    src={brand.image || "/placeholder.svg"}
+                    alt={brand.name}
+                    width={150}
+                    height={75}
+                    className="object-contain"
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      {/* Ubicaciones */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-8">NUESTRAS TIENDAS</h2>
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold mb-4">SUCURSAL CORDOBA</h3>
-              <p className="text-muted-foreground mb-4">Corrientes 473, Centro, X5000ANI Córdoba</p>
-              <div className="relative h-48 rounded-lg overflow-hidden mb-4">
-                <Image
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="Mapa Sucursal Córdoba"
-                  fill
-                  className="object-cover"
-                />
+          {/* Ubicaciones */}
+          <section className="mt-16">
+            <h2 className="text-2xl font-semibold mb-8">NUESTRAS TIENDAS</h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-4">SUCURSAL CORDOBA</h3>
+                  <p className="text-muted-foreground mb-4">Corrientes 473, Centro, X5000ANI Córdoba</p>
+                  <div className="relative h-48 rounded-lg overflow-hidden mb-4">
+                    <Image
+                      src="/placeholder.svg?height=400&width=600"
+                      alt="Mapa Sucursal Córdoba"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <Button variant="outline" className="w-full">
+                    ¿COMO LLEGAR?
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-4">SUCURSAL RIO CUARTO</h3>
+                  <p className="text-muted-foreground mb-4">Corrientes 473, Centro, X5000ANI</p>
+                  <div className="relative h-48 rounded-lg overflow-hidden mb-4">
+                    <Image
+                      src="/placeholder.svg?height=400&width=600"
+                      alt="Mapa Sucursal Rio Cuarto"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <Button variant="outline" className="w-full">
+                    ¿COMO LLEGAR?
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Modificar la parte de ProductsGrid para corregir el problema con el ordenamiento
+
+// Componente para cargar productos
+async function ProductsGrid({
+  filters = {},
+  page = 1,
+  sort = "newest",
+}: {
+  filters?: ProductFilter
+  page?: number
+  sort?: string
+}) {
+  const { products, total, pages } = await getProducts(filters, page, 12, sort)
+
+  if (products.length === 0) {
+    return (
+      <div className="text-center py-12 bg-muted rounded-lg">
+        <h3 className="text-lg font-medium">No se encontraron productos</h3>
+        <p className="text-muted-foreground mt-2">Intenta con otros filtros o categorías</p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <p className="text-muted-foreground">
+          Mostrando {products.length} de {total} productos
+        </p>
+        <div className="flex items-center gap-2">
+          <span className="text-sm">Ordenar por:</span>
+          <select
+            className="border rounded p-1 text-sm"
+            defaultValue={sort}
+            onChange={(e) => {
+              // Usar window.location.href de manera segura para evitar bucles
+              const url = new URL(window.location.href)
+              url.searchParams.set("sort", e.target.value)
+              // Usar window.location.href = url.toString() en lugar de router.push
+              window.location.href = url.toString()
+            }}
+          >
+            <option value="newest">Más recientes</option>
+            <option value="price-low">Precio: menor a mayor</option>
+            <option value="price-high">Precio: mayor a menor</option>
+            <option value="name-asc">Nombre: A-Z</option>
+            <option value="name-desc">Nombre: Z-A</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+
+      {/* Paginación */}
+      {pages > 1 && (
+        <div className="flex justify-center mt-8">
+          <div className="flex space-x-2">
+            {Array.from({ length: pages }).map((_, i) => {
+              // Crear una nueva URL con los parámetros actuales
+              const url = new URL(window.location.href)
+              url.searchParams.set("page", (i + 1).toString())
+
+              return (
+                <a
+                  key={i}
+                  href={url.toString()}
+                  className={`px-4 py-2 rounded ${page === i + 1 ? "bg-primary text-primary-foreground" : "bg-muted"}`}
+                >
+                  {i + 1}
+                </a>
+              )
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Skeleton para carga de productos
+function ProductsGridSkeleton() {
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <Skeleton className="h-6 w-48" />
+        <Skeleton className="h-8 w-40" />
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Card key={i} className="overflow-hidden">
+            <div className="relative h-64">
+              <Skeleton className="h-full w-full" />
+            </div>
+            <CardContent className="p-4">
+              <Skeleton className="h-6 w-3/4 mb-2" />
+              <Skeleton className="h-4 w-full mb-2" />
+              <div className="flex justify-between mt-2">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-16" />
               </div>
-              <Button variant="outline" className="w-full">
-                ¿COMO LLEGAR?
-              </Button>
+              <Skeleton className="h-10 w-full mt-4" />
             </CardContent>
           </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold mb-4">SUCURSAL RIO CUARTO</h3>
-              <p className="text-muted-foreground mb-4">Corrientes 473, Centro, X5000ANI</p>
-              <div className="relative h-48 rounded-lg overflow-hidden mb-4">
-                <Image
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="Mapa Sucursal Rio Cuarto"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <Button variant="outline" className="w-full">
-                ¿COMO LLEGAR?
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+        ))}
+      </div>
     </div>
   )
 }
