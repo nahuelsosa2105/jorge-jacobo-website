@@ -23,7 +23,7 @@ export default function Home() {
           </div>
           <div className="relative h-[400px] overflow-hidden rounded-lg">
             <Image
-              src="/placeholder.svg?height=800&width=1200"
+              src="/refe familia industria 2,45x2.png"
               alt="Jorge Jacobo E Hijos"
               fill
               className="object-cover"
@@ -37,11 +37,10 @@ export default function Home() {
       <section className="container">
         <h2 className="text-3xl font-bold tracking-tighter mb-8">PRODUCTOS</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          <CategoryCard title="CALZADO" href="/productos/calzado" />
-          <CategoryCard title="TRABAJO" href="/productos/trabajo" />
-          <CategoryCard title="ACCESORIOS" href="/productos/accesorios" />
-          <CategoryCard title="SEGURIDAD" href="/productos/seguridad" />
-          <CategoryCard title="MUJER" href="/productos/mujer" />
+          <CategoryCard title="CALZADO" href="/productos/calzado" imageSrc="/fondo-calzado.jpg" />
+          <CategoryCard title="TRABAJO" href="/productos/trabajo" imageSrc="/refe familia industria 2,45x2.png" />
+          <CategoryCard title="ACCESORIOS" href="/productos/accesorios" imageSrc="/fondo-accesorios.jpg" />
+          <CategoryCard title="SEGURIDAD" href="/productos/seguridad" imageSrc="/equipamiento-y-seguridad.jpg" />
         </div>
       </section>
 
@@ -51,7 +50,7 @@ export default function Home() {
         <div className="flex flex-wrap justify-center gap-12">
           <div className="bg-background p-6 rounded-lg shadow-sm">
             <Image
-              src="/placeholder.svg?height=100&width=200"
+              src="/ombu-logo.jpg"
               alt="OMBU"
               width={150}
               height={75}
@@ -91,12 +90,12 @@ export default function Home() {
   )
 }
 
-function CategoryCard({ title, href }: { title: string; href: string }) {
+function CategoryCard({ title, href, imageSrc }: { title: string; href: string; imageSrc: string }) {
   return (
     <Card className="overflow-hidden">
       <div className="relative h-48">
         <Image
-          src="/placeholder.svg?height=400&width=400"
+          src={imageSrc || "/placeholder.svg"}
           alt={title}
           fill
           className="object-cover transition-transform hover:scale-105"
@@ -122,7 +121,7 @@ function LocationCard({ title, address }: { title: string; address: string }) {
         </div>
         <div className="flex items-center gap-2 mb-6">
           <Phone className="h-5 w-5 text-muted-foreground" />
-          <p className="text-muted-foreground">351-4245041</p>
+          <p className="text-muted-foreground">351-3804567</p>
         </div>
         <Button variant="outline" className="w-full">
           ¿COMO LLEGAR?

@@ -18,13 +18,13 @@ export default function AboutPage() {
           </p>
         </div>
         <div className="relative h-[400px] rounded-lg overflow-hidden">
-          <Image src="/placeholder.svg?height=800&width=800" alt="Nuestra empresa" fill className="object-cover" />
+          <Image src="/pexels-imagen-fabrica.jpg" alt="Nuestra empresa" fill className="object-cover" />
         </div>
       </div>
 
       <div className="grid gap-8 md:grid-cols-2 items-center">
         <div className="relative h-[400px] rounded-lg overflow-hidden md:order-last">
-          <Image src="/placeholder.svg?height=800&width=800" alt="Nuestro equipo" fill className="object-cover" />
+          <Image src="/pexels-sylvain-lelong-289676095-14252238.jpg" alt="Nuestro equipo" fill className="object-cover" />
         </div>
         <div>
           <p className="text-lg mb-4">
@@ -45,7 +45,7 @@ export default function AboutPage() {
         <div className="flex flex-wrap justify-center gap-8">
           <div className="bg-background p-6 rounded-lg shadow-sm">
             <Image
-              src="/placeholder.svg?height=100&width=200"
+              src="/ombu-logo.jpg"
               alt="OMBU"
               width={150}
               height={75}

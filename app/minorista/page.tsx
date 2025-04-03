@@ -35,7 +35,7 @@ const brands = [
   {
     id: "ombu",
     name: "OMBU",
-    image: "/placeholder.svg?height=100&width=200",
+    image: "/ombu-logo.jpg",
   },
   {
     id: "santista",
@@ -124,7 +124,7 @@ export default async function RetailPage({
               {brands.map((brand) => (
                 <div key={brand.id} className="bg-muted p-6 rounded-lg">
                   <Image
-                    src={brand.image || "/placeholder.svg"}
+                    src={brand.image || "/ombu-logo.jpg"}
                     alt={brand.name}
                     width={150}
                     height={75}
