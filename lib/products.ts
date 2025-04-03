@@ -1,141 +1,229 @@
-import { Product, ProductCategory, ProductFilter } from "@/app/types/products";
+import type { Product, ProductCategory, ProductFilter } from "@/app/types/products"
+
+// Función para obtener productos por categoría con filtros y paginación
+export async function getProductsByCategory(
+  category: ProductCategory,
+  page = 1,
+  limit = 12,
+  filters: Record<string, any> = {},
+): Promise<{ products: Product[]; total: number; pages: number }> {
+  // Simulamos una pequeña demora como lo haría una API real
+  await new Promise((resolve) => setTimeout(resolve, 300))
+
+  // Filtramos los productos según la categoría
+  let filteredProducts = products.filter((product) => product.category === category)
+
+  // Aplicamos los filtros adicionales
+  if (filters.brand) {
+    filteredProducts = filteredProducts.filter((product) => filters.brand.includes(product.brand))
+  }
+
+  if (filters.sizes) {
+    filteredProducts = filteredProducts.filter((product) => {
+      if (!product.sizes) return false
+      return product.sizes.some((size) => filters.sizes.includes(size))
+    })
+  }
+
+  // Calculamos el total y las páginas
+  const total = filteredProducts.length
+  const pages = Math.ceil(total / limit)
+
+  // Aplicamos la paginación
+  const start = (page - 1) * limit
+  const end = start + limit
+  const paginatedProducts = filteredProducts.slice(start, end)
+
+  return {
+    products: paginatedProducts,
+    total,
+    pages,
+  }
+}
 
 // Función para obtener productos con filtros y paginación
 export async function getProducts(
   filters: ProductFilter = {},
-  page: number = 1,
-  limit: number = 12,
-  sort: string = "newest"
+  page = 1,
+  limit = 12,
+  sort = "newest",
 ): Promise<{ products: Product[]; total: number; pages: number }> {
   // Simulamos una pequeña demora como lo haría una API real
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
+  await new Promise((resolve) => setTimeout(resolve, 300))
+
   // Filtramos los productos según los criterios
-  let filteredProducts = [...products];
-  
+  let filteredProducts = [...products]
+
   // Filtro por categoría
   if (filters.category && filters.category.length > 0) {
-    filteredProducts = filteredProducts.filter(product => 
-      filters.category?.includes(product.category)
-    );
+    filteredProducts = filteredProducts.filter((product) => filters.category?.includes(product.category))
   }
-  
+
   // Filtro por marca
   if (filters.brand && filters.brand.length > 0) {
-    filteredProducts = filteredProducts.filter(product => 
-      filters.brand?.includes(product.brand)
-    );
+    filteredProducts = filteredProducts.filter((product) => filters.brand?.includes(product.brand))
   }
-  
+
   // Filtro por talla
   if (filters.size && filters.size.length > 0) {
-    filteredProducts = filteredProducts.filter(product => 
-      product.sizes?.some(size => filters.size?.includes(size))
-    );
+    filteredProducts = filteredProducts.filter((product) => product.sizes?.some((size) => filters.size?.includes(size)))
   }
-  
+
   // Filtro por color
   if (filters.color && filters.color.length > 0) {
-    filteredProducts = filteredProducts.filter(product => 
-      product.colors?.some(color => filters.color?.includes(color))
-    );
+    filteredProducts = filteredProducts.filter((product) =>
+      product.colors?.some((color) => filters.color?.includes(color)),
+    )
   }
-  
+
   // Filtro por precio
   if (filters.minPrice !== undefined) {
-    filteredProducts = filteredProducts.filter(product => 
-      product.price !== undefined && product.price >= (filters.minPrice || 0)
-    );
+    filteredProducts = filteredProducts.filter(
+      (product) => product.price !== undefined && product.price >= (filters.minPrice || 0),
+    )
   }
-  
+
   if (filters.maxPrice !== undefined) {
-    filteredProducts = filteredProducts.filter(product => 
-      product.price !== undefined && product.price <= (filters.maxPrice || Infinity)
-    );
+    filteredProducts = filteredProducts.filter(
+      (product) => product.price !== undefined && product.price <= (filters.maxPrice || Number.POSITIVE_INFINITY),
+    )
   }
-  
+
   // Ordenar productos
   switch (sort) {
     case "newest":
-      filteredProducts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-      break;
+      filteredProducts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      break
     case "price-low":
-      filteredProducts.sort((a, b) => (a.price || 0) - (b.price || 0));
-      break;
+      filteredProducts.sort((a, b) => (a.price || 0) - (b.price || 0))
+      break
     case "price-high":
-      filteredProducts.sort((a, b) => (b.price || 0) - (a.price || 0));
-      break;
+      filteredProducts.sort((a, b) => (b.price || 0) - (a.price || 0))
+      break
     case "name-asc":
-      filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-      break;
+      filteredProducts.sort((a, b) => a.name.localeCompare(b.name))
+      break
     case "name-desc":
-      filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-      break;
+      filteredProducts.sort((a, b) => b.name.localeCompare(a.name))
+      break
   }
-  
+
   // Calculamos el total y las páginas
-  const total = filteredProducts.length;
-  const pages = Math.ceil(total / limit);
-  
+  const total = filteredProducts.length
+  const pages = Math.ceil(total / limit)
+
   // Aplicamos la paginación
-  const start = (page - 1) * limit;
-  const end = start + limit;
-  const paginatedProducts = filteredProducts.slice(start, end);
-  
+  const start = (page - 1) * limit
+  const end = start + limit
+  const paginatedProducts = filteredProducts.slice(start, end)
+
   return {
     products: paginatedProducts,
     total,
-    pages
-  };
+    pages,
+  }
+}
+
+// Función para obtener un producto por ID
+export async function getProductById(id: string): Promise<Product | null> {
+  // Simulamos una pequeña demora como lo haría una API real
+  await new Promise((resolve) => setTimeout(resolve, 200))
+
+  const product = products.find((p) => p.id === id)
+  return product || null
+}
+
+// Función para obtener productos destacados
+export async function getFeaturedProducts(limit = 4): Promise<Product[]> {
+  // Simulamos una pequeña demora como lo haría una API real
+  await new Promise((resolve) => setTimeout(resolve, 200))
+
+  return products.filter((product) => product.featured).slice(0, limit)
 }
 
 // Función para obtener todas las marcas disponibles
 export function getAllBrands(): string[] {
-  const brands = new Set<string>();
-  products.forEach(product => {
+  const brands = new Set<string>()
+  products.forEach((product) => {
     if (product.brand) {
-      brands.add(product.brand);
+      brands.add(product.brand)
     }
-  });
-  return Array.from(brands);
+  })
+  return Array.from(brands)
 }
 
 // Función para obtener todas las tallas disponibles
 export function getAllSizes(): string[] {
-  const sizes = new Set<string>();
-  products.forEach(product => {
+  const sizes = new Set<string>()
+  products.forEach((product) => {
     if (product.sizes) {
-      product.sizes.forEach(size => sizes.add(size));
+      product.sizes.forEach((size) => sizes.add(size))
     }
-  });
+  })
   return Array.from(sizes).sort((a, b) => {
     // Ordenar numéricamente si son números
-    const numA = parseInt(a);
-    const numB = parseInt(b);
+    const numA = Number.parseInt(a)
+    const numB = Number.parseInt(b)
     if (!isNaN(numA) && !isNaN(numB)) {
-      return numA - numB;
+      return numA - numB
     }
-    return a.localeCompare(b);
-  });
+    return a.localeCompare(b)
+  })
 }
 
-// Lista de productos de ejemplo
-// Lista de productos de ejemplo
-export const products: Product[] = [
+// Función para obtener todos los colores disponibles
+export function getAllColors(): string[] {
+  const colors = new Set<string>()
+  products.forEach((product) => {
+    if (product.colors) {
+      product.colors.forEach((color) => colors.add(color))
+    }
+  })
+  return Array.from(colors)
+}
+
+// Aquí puedes agregar tus productos
+// Esta es una lista de ejemplo que puedes reemplazar con tus productos reales
+const products: Product[] = [
     {
       id: "1",
-      name: "Camisa STD de Trabajo",
+      name: "Camisa de Trabajo",
       description: "Camisa de trabajo manga larga, confeccionada en tela de algodón 100%, resistente al desgaste.",
       category: "trabajo",
       brand: "OMBU",
-      image: "/images/products/camisa-trabajo-1.jpg",
+      image: "/Productos/O-CM13 BLANCO.webp",
       images: [
-        "/images/products/camisa-trabajo-1.jpg",
-        "/images/products/camisa-trabajo-2.jpg",
-        "/images/products/camisa-trabajo-3.jpg",
+        // "/Productos/_MG_9377.webp",
+        // "/Productos/camisa con sticker antiolor.webp",
+        // "/images/products/camisa-trabajo-3.jpg",
       ],
       price: 15000,
-      sizes: ["38", "40", "42", "44", "46"],
+      sizes: ["S", "M", "L", "XL", "XXL"],
+      colors: ["Blanco"],  // Opcional, pero recomendado
+      features: [                         // Opcional, pero recomendado
+        "100% algodón",
+        "Doble costura",
+        "Bolsillos frontales",
+        "Resistente al desgaste"
+      ],
+      inStock: true,                      // Requerido
+      featured: true,                     // Opcional
+      createdAt: new Date("2023-01-15")   // Requerido
+    },
+    {
+      id: "2",
+      name: "Camisa de Trabajo sticker Antiolor",
+      description: "Camisa de trabajo manga larga, confeccionada en tela de algodón 100%, resistente al desgaste.",
+      category: "trabajo",
+      brand: "OMBU",
+      image: "/Productos/camisa con sticker antiolor.webp",
+      images: [
+        // "/Productos/_MG_9377.webp",
+        // "/Productos/camisa con sticker antiolor.webp",
+        // "/images/products/camisa-trabajo-3.jpg",
+      ],
+      price: 15000,
+      sizes: ["S", "M", "L", "XL", "XXL"],
       colors: ["Azul", "Gris", "Verde"],  // Opcional, pero recomendado
       features: [                         // Opcional, pero recomendado
         "100% algodón",
@@ -146,6 +234,77 @@ export const products: Product[] = [
       inStock: true,                      // Requerido
       featured: true,                     // Opcional
       createdAt: new Date("2023-01-15")   // Requerido
-    }
-  ]
-   
+    },
+    {
+      id: "3",
+      name: "Chomba ",
+      description: "Chomba, confeccionada en tela de algodón 100%, resistente al desgaste.",
+      category: "campo",
+      brand: "OMBU",
+      image: "/Productos/O-CH03 VERDE VARIANTE copy.webp",
+      images: [
+        
+      ],
+      price: 15000,
+      sizes: ["S", "M", "L", "XL", "XXL"],
+      colors: [ "Verde"],  
+      features: [                         
+        "100% algodón",
+        "Doble costura",
+        "Bolsillos frontales",
+        "Resistente al desgaste"
+      ],
+      inStock: true,                      
+      featured: true,                     
+      createdAt: new Date("2023-01-15")   
+    },
+    {
+      id: "4",
+      name: "Pantalón de Trabajo ",
+      description: "Pantalón, confeccionada en tela de algodón 100%, resistente al desgaste.",
+      category: "trabajo",
+      brand: "OMBU",
+      image: "/Productos/_MG_9377.webp",
+      images: [
+        
+      ],
+      price: 15000,
+      sizes: ["38", "40", "42", "44", "46"],
+      colors: [ "Beige"],  
+      features: [                         
+        "100% algodón",
+        "Doble costura",
+        "Bolsillos frontales",
+        "Resistente al desgaste"
+      ],
+      inStock: true,                      
+      featured: true,                     
+      createdAt: new Date("2023-01-15")   
+    },
+    {
+      id: "5",
+      name: "Bombacha de Campo ",
+      description: "Bombacha de campo, confeccionada en tela de algodón 100%, resistente al desgaste.",
+      category: "campo",
+      brand: "OMBU",
+      image: "/Productos/OBCA01P BEIGE copy.webp",
+      images: [
+        
+      ],
+      price: 15000,
+      sizes: ["38", "40", "42", "44", "46"],
+      colors: [ "Beige"],  
+      features: [                         
+        "100% algodón",
+        "Doble costura",
+        "Resistente al desgaste"
+      ],
+      inStock: true,                      
+      featured: true,                     
+      createdAt: new Date("2023-01-15")   
+    },
+]
+
+// Exportamos la lista de productos para uso directo si es necesario
+export { products }
+

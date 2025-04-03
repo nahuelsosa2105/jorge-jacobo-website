@@ -1,6 +1,5 @@
-"use client"
-
 import { Suspense } from "react"
+import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,6 +8,7 @@ import { ProductCard } from "@/components/product-card"
 import { ProductFilters } from "@/components/product-filters"
 import { getProducts, getAllBrands, getAllSizes } from "@/lib/products"
 import type { ProductCategory, ProductFilter } from "@/app/types/products"
+import { SortSelector } from "@/components/sort-selector"
 
 // Categorías de productos
 const categories: { id: ProductCategory; name: string }[] = [
@@ -49,7 +49,8 @@ const brands = [
   },
 ]
 
-export default function RetailPage({
+// Convertimos la función en asíncrona para poder esperar searchParams
+export default async function RetailPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -181,20 +182,21 @@ export default function RetailPage({
   )
 }
 
-// Modificar la parte de ProductsGrid para corregir el problema con el ordenamiento
+// Componente para cargar productos
+
 
 // Componente para cargar productos
-async function ProductsGrid({
+async function ProductsGrid({ 
   filters = {},
   page = 1,
-  sort = "newest",
-}: {
-  filters?: ProductFilter
-  page?: number
+  sort = 'newest'
+}: { 
+  filters?: ProductFilter,
+  page?: number,
   sort?: string
 }) {
   const { products, total, pages } = await getProducts(filters, page, 12, sort)
-
+  
   if (products.length === 0) {
     return (
       <div className="text-center py-12 bg-muted rounded-lg">
@@ -203,41 +205,20 @@ async function ProductsGrid({
       </div>
     )
   }
-
+  
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <p className="text-muted-foreground">
-          Mostrando {products.length} de {total} productos
-        </p>
-        <div className="flex items-center gap-2">
-          <span className="text-sm">Ordenar por:</span>
-          <select
-            className="border rounded p-1 text-sm"
-            defaultValue={sort}
-            onChange={(e) => {
-              // Usar window.location.href de manera segura para evitar bucles
-              const url = new URL(window.location.href)
-              url.searchParams.set("sort", e.target.value)
-              // Usar window.location.href = url.toString() en lugar de router.push
-              window.location.href = url.toString()
-            }}
-          >
-            <option value="newest">Más recientes</option>
-            <option value="price-low">Precio: menor a mayor</option>
-            <option value="price-high">Precio: mayor a menor</option>
-            <option value="name-asc">Nombre: A-Z</option>
-            <option value="name-desc">Nombre: Z-A</option>
-          </select>
-        </div>
+        <p className="text-muted-foreground">Mostrando {products.length} de {total} productos</p>
+        <SortSelector currentSort={sort} />
       </div>
-
+      
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
+        {products.map(product => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-
+      
       {/* Paginación */}
       {pages > 1 && (
         <div className="flex justify-center mt-8">
@@ -245,13 +226,13 @@ async function ProductsGrid({
             {Array.from({ length: pages }).map((_, i) => {
               // Crear una nueva URL con los parámetros actuales
               const url = new URL(window.location.href)
-              url.searchParams.set("page", (i + 1).toString())
-
+              url.searchParams.set('page', (i + 1).toString())
+              
               return (
-                <a
-                  key={i}
+                <a 
+                  key={i} 
                   href={url.toString()}
-                  className={`px-4 py-2 rounded ${page === i + 1 ? "bg-primary text-primary-foreground" : "bg-muted"}`}
+                  className={`px-4 py-2 rounded ${page === i + 1 ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}
                 >
                   {i + 1}
                 </a>
@@ -294,4 +275,3 @@ function ProductsGridSkeleton() {
     </div>
   )
 }
-
