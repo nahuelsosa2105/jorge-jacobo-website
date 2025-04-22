@@ -13,9 +13,16 @@ interface ProductFiltersProps {
   brands: string[]
   sizes: string[]
   initialFilters?: ProductFilter
+  onFilterApplied?: () => void // Callback para cuando se aplica un filtro (útil para cerrar el menú móvil)
 }
 
-export function ProductFilters({ categories, brands, sizes, initialFilters = {} }: ProductFiltersProps) {
+export function ProductFilters({
+  categories,
+  brands,
+  sizes,
+  initialFilters = {},
+  onFilterApplied,
+}: ProductFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [filters, setFilters] = useState<ProductFilter>(initialFilters)
@@ -103,10 +110,21 @@ export function ProductFilters({ categories, brands, sizes, initialFilters = {} 
         params.set("page", page)
       }
 
+      // Mantener el orden actual si existe
+      const sort = searchParams.get("sort")
+      if (sort) {
+        params.set("sort", sort)
+      }
+
       // Actualizar la URL
       router.push(`/minorista?${params.toString()}`)
+
+      // Llamar al callback si existe
+      if (onFilterApplied) {
+        onFilterApplied()
+      }
     },
-    [router, searchParams],
+    [router, searchParams, onFilterApplied],
   )
 
   // Manejadores para cada tipo de filtro
@@ -233,4 +251,3 @@ export function ProductFilters({ categories, brands, sizes, initialFilters = {} 
     </div>
   )
 }
-

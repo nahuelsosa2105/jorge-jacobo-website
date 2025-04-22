@@ -11,7 +11,7 @@ export default function Home() {
       <section className="container">
         <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl">Jorge Jacobo E Hijos S.A.</h1>
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl">Juan Jorge Jacobo E Hijos S.A.</h1>
             <p className="text-muted-foreground text-lg">
               Especialistas en ropa de trabajo y calzado de calidad para profesionales.
             </p>

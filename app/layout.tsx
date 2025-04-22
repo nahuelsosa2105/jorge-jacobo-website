@@ -9,7 +9,7 @@ import Footer from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Jorge Jacobo E Hijos S.A.",
+  title: "Juan Jorge Jacobo E Hijos S.A.",
   description: "Ropa de trabajo y calzado de calidad",
     generator: 'v0.dev'
 }

@@ -14,10 +14,10 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background">
+    <header className="sticky top-0 z-50 w-full border-b bg-black text-white">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-xl font-bold">Jorge Jacobo E Hijos S.A.</span>
+          <span className="text-xl font-bold">Juan Jorge Jacobo E Hijos S.A.</span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
