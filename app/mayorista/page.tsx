@@ -83,7 +83,7 @@ export default function WholesalePage() {
               className="w-full sm:w-auto bg-[#25D366] hover:bg-[#128C7E] text-white flex items-center gap-2"
               onClick={() =>
                 window.open(
-                  `https://wa.me/543514245041?text=${encodeURIComponent("Hola, estoy interesado en realizar un pedido mayorista.")}`,
+                  `https://wa.me/5493513804567?text=${encodeURIComponent("Hola, estoy interesado en realizar un pedido mayorista.")}`,
                   "_blank",
                 )
               }
