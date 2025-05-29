@@ -15,13 +15,11 @@ export default function CarritoPage() {
       .map((item, i) => `${i + 1}. ${item.name} - Cantidad: ${item.quantity}`)
       .join('\n');
 
-    const url = `https://wa.me/5493513804567?text=${encodeURIComponent(
-      'Hola, quiero hacer el siguiente pedido:\n' + message
-    )}`;
+      const finalMessage = `Hola, quiero hacer el siguiente pedido:\n${message}`;
+        const encoded = encodeURIComponent(finalMessage);
+        const url = `https://wa.me/5493513804567?text=${encoded}`;
 
-    clearCart(); // opcional: limpiar luego de enviar
-    window.open(url, '_blank');
-  };
+        window.open(url, '_blank');};
 
   return (
     <div className="p-4">
