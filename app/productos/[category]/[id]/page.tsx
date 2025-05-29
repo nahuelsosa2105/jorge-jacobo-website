@@ -6,7 +6,8 @@ import ProductDetail from "./product-detail"
 // Componente servidor que carga los datos
 export default async function ProductPage({ params }: { params: { category: string; id: string } }) {
   // Obtener el producto desde el servidor
-  const product = await getProductById(params.id)
+  const resolvedParams = await params;
+  const product = await getProductById(resolvedParams.id)
 
   // Si no se encuentra el producto, mostrar 404 (esto ocurre en el servidor)
   if (!product) {
