@@ -35,7 +35,7 @@ export default function WholesalePage() {
     setSubmitStatus({})
 
     try {
-      const response = await fetch("https://formspree.io/f/movenvlz", {
+      const response = await fetch("https://formspree.io/f/mblynygg", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -34,7 +34,7 @@ export default function ContactPage() {
 
     try {
       // Reemplaza 'YOUR_FORMSPREE_ENDPOINT' con el endpoint que te proporcionó Formspree
-      const response = await fetch("https://formspree.io/f/movenvlz", {
+      const response = await fetch("https://formspree.io/f/mblynygg", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
