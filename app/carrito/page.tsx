@@ -18,6 +18,8 @@ export default function CarritoPage() {
       const finalMessage = `Hola, quiero hacer el siguiente pedido:\n${message}`;
         const encoded = encodeURIComponent(finalMessage);
         const url = `https://wa.me/5493513804567?text=${encoded}`;
+        // https://walink.co/515eab
+        // https://api.whatsapp.com/send/?phone=5493513804567&text&type=phone_number&app_absent=0
 
         window.open(url, '_blank');};
 
