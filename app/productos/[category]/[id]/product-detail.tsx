@@ -1,11 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { Product } from "@/app/types/products"
-import { useCart } from "@/app/context/CartContext" // 👈 Asegurate de tener esto implementado
+import { useCart } from "@/app/context/CartContext"
 
 interface ProductDetailProps {
   product: Product
@@ -14,17 +15,16 @@ interface ProductDetailProps {
 export default function ProductDetail({ product }: ProductDetailProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
-  const { addItem } = useCart() // 👈 Hook del carrito
+  const { addItem } = useCart()
+  const router = useRouter()
 
   const generateWhatsAppLink = () => {
     const phoneNumber = "+5493513804567"
-
     let message = `Hola, estoy interesado en el producto: ${product.name}`
     if (product.price) message += `\nPrecio: $${product.price.toLocaleString()}`
     if (selectedSize) message += `\nTalle seleccionado: ${selectedSize}`
     if (selectedColor) message += `\nColor seleccionado: ${selectedColor}`
     message += `\nReferencia: ${product.id}`
-
     return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
   }
 
@@ -39,7 +39,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       return
     }
 
-    if (!product.price){
+    if (!product.price) {
       alert("Este producto no tiene un precio definido.")
       return
     }
@@ -48,7 +48,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       alert("Este producto no tiene una imagen definida.")
       return
     }
-
 
     addItem({
       id: product.id,
@@ -64,6 +63,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   return (
     <div className="container py-8">
+      {/* Botón para volver */}
+      <Button
+  onClick={() => router.push("/minorista")}
+  className="mb-6 bg-black text-white hover:bg-zinc-800 transition duration-200 transform hover:scale-105"
+>
+  ← Volver
+</Button>
+
       <div className="grid gap-8 md:grid-cols-2">
         {/* Galería */}
         <div className="space-y-4">
@@ -122,8 +129,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </div>
           )}
 
-
-
           {(product.colors ?? []).length > 0 && (
             <div>
               <h3 className="font-semibold mb-2">COLOR</h3>
@@ -150,7 +155,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <p>{product.description}</p>
             </TabsContent>
             <TabsContent value="features" className="p-4 border rounded-md mt-2">
-              {(product.features ??[]).length > 0 ? (
+              {(product.features ?? []).length > 0 ? (
                 <ul className="list-disc pl-5 space-y-1">
                   {(product.features ?? []).map((feature, index) => (
                     <li key={index}>{feature}</li>
@@ -184,7 +189,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 viewBox="0 0 24 24"
                 fill="white"
               >
-                <path d="... (icono de WhatsApp) ..." />
+                <path d="M12 0C5.37 0 0 5.373 0 12c0 2.12.554 4.105 1.52 5.832L0 24l6.334-1.658C8.09 23.44 9.997 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.507 17.59c-.229.643-1.336 1.207-1.847 1.284-.473.07-1.063.1-1.714-.112-2.79-.887-4.61-3.272-4.746-3.428-.14-.156-1.134-1.504-1.134-2.87 0-1.367.716-2.041.968-2.304.229-.238.61-.347.968-.347.118 0 .229.006.33.012.289.012.434.02.626.489.229.577.778 1.991.846 2.134.07.141.117.306.023.489-.094.183-.14.283-.276.437-.141.165-.296.37-.425.497-.141.14-.288.294-.125.577.164.283.725 1.2 1.555 1.942 1.067.951 1.97 1.25 2.254 1.39.283.141.45.118.615-.07.164-.188.708-.825.898-1.106.188-.282.377-.235.63-.141.252.094 1.596.752 1.87.888.276.141.46.212.528.33.07.118.07.683-.158 1.325z" />
               </svg>
               CONTACTAR PARA COMPRAR
             </Button>
