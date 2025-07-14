@@ -76,7 +76,7 @@ export default function ContactPage() {
           className="bg-[#25D366] hover:bg-[#128C7E] text-white flex items-center gap-2"
           onClick={() =>
             window.open(
-              `https://wa.me/543514245041?text=${encodeURIComponent("Hola, tengo una consulta sobre sus productos.")}`,
+              `https://wa.me/5493513804567?text=${encodeURIComponent("Hola, tengo una consulta sobre sus productos.")}`,
               "_blank",
             )
           }
