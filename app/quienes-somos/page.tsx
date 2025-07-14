@@ -8,21 +8,24 @@ export default function AboutPage() {
       <div className="grid gap-8 md:grid-cols-2 items-center mb-16">
         <div>
           <p className="text-lg mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur libero augue, id rutrum justo
-            bibendum tincidunt. Nullam auctor lacinia risus vitae malesuada. Suspendisse accumsan enim quis odio
-            maximus, eget placerat velit rutrum.
+            En JUAN JORGE JACOBO E HIJOS SA, somos fabricantes y vendedores oficiales de la reconocida marca OMBU, lo que nos permite ofrecer productos que provienen directamente de fábrica,
+             garantizando la autenticidad, calidad y durabilidad que caracteriza a la marca. Contamos con licencia oficial para la fabricación y comercialización,
+              lo que nos convierte en un referente confiable dentro del rubro de la indumentaria y el calzado laboral. 
+              Nuestra propuesta combina funcionalidad, estilo y seguridad,
+             pensada para acompañarte en las exigencias del trabajo diario sin dejar de lado la comodidad.
           </p>
           <p className="text-lg">
-            Donec in molestie lacus. Nulla tincidunt lacinia iaculis. Vestibulum lobortis laoreet risus sed consectetur.
-            Ut ut mauris magna. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+            Además de nuestra tienda online, donde podés encontrar descripciones detalladas,
+             también podés visitarnos en nuestros dos locales físicos en Córdoba Capital y Villa María,
+             donde brindamos atención personalizada y asesoramiento especializado.
           </p>
         </div>
         <div className="relative h-[400px] rounded-lg overflow-hidden">
-          <Image src="/pexels-imagen-fabrica.jpg" alt="Nuestra empresa" fill className="object-cover" />
+          <Image src="/INICIO-QUIENES-SOMOS.jpg" alt="Nuestra empresa" fill className="object-cover" />
         </div>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2 items-center">
+      {/* <div className="grid gap-8 md:grid-cols-2 items-center">
         <div className="relative h-[400px] rounded-lg overflow-hidden md:order-last">
           <Image src="/pexels-sylvain-lelong-289676095-14252238.jpg" alt="Nuestro equipo" fill className="object-cover" />
         </div>
@@ -38,7 +41,7 @@ export default function AboutPage() {
             maximus, eget placerat velit rutrum.
           </p>
         </div>
-      </div>
+      </div> */}
 
       <div className="mt-16 bg-muted p-8 rounded-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">NUESTRAS MARCAS</h2>
@@ -52,7 +55,7 @@ export default function AboutPage() {
               className="object-contain"
             />
           </div>
-          <div className="bg-background p-6 rounded-lg shadow-sm">
+          {/* <div className="bg-background p-6 rounded-lg shadow-sm">
             <Image
               src="/placeholder.svg?height=100&width=200"
               alt="SANTISTA"
@@ -69,7 +72,7 @@ export default function AboutPage() {
               height={75}
               className="object-contain"
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
