@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { MapPin, Phone } from "lucide-react"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -163,7 +164,66 @@ export default function ContactPage() {
           </CardContent>
         </Card>
       </div>
+      <div>
+
+        <section className="container mt-24">
+          <h2 className="text-3xl font-bold tracking-tighter mb-8">¿DÓNDE ESTAMOS?</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <LocationCard
+              title="SUCURSAL CÓRDOBA"
+              address="Corrientes 473, Centro, X5000ANI Córdoba"
+              phone="351-3804567"
+              mapsUrl="https://maps.app.goo.gl/w7K5brAgAg2X8x3s6"
+            />
+            <LocationCard
+              title="SUCURSAL VILLA MARÍA"
+              address="José Ingenieros 340, X5900 Villa María, Córdoba"
+              phone="353-4534674"
+              mapsUrl="https://maps.app.goo.gl/QCXA5aCAJfCg52Xv8"
+            />
+          </div>
+        </section>
+      </div>
     </div>
   )
+
+  function LocationCard({
+  title,
+  address,
+  phone,
+  mapsUrl,
+}: {
+  title: string
+  address: string
+  phone: string
+  mapsUrl: string
+}) {
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <h3 className="text-xl font-semibold mb-4">{title}</h3>
+
+        <div className="flex items-start gap-2 mb-4">
+          <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
+          <p className="text-muted-foreground">{address}</p>
+        </div>
+
+        <div className="flex items-center gap-2 mb-6">
+          <Phone className="h-5 w-5 text-muted-foreground" />
+          <p className="text-muted-foreground">{phone}</p>
+        </div>
+
+        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+          <Button variant="outline" className="w-full">
+            ¿CÓMO LLEGAR?
+          </Button>
+        </a>
+      </CardContent>
+    </Card>
+  )
+}
+
+
+  
 }
 

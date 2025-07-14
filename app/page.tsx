@@ -37,10 +37,10 @@ export default function Home() {
       <section className="container">
         <h2 className="text-3xl font-bold tracking-tighter mb-8">PRODUCTOS</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          <CategoryCard title="CALZADO" href="/productos/calzado" imageSrc="/fondo-calzado.jpg" />
-          <CategoryCard title="TRABAJO" href="/productos/trabajo" imageSrc="/refe familia industria 2,45x2.png" />
-          <CategoryCard title="ACCESORIOS" href="/productos/accesorios" imageSrc="/fondo-accesorios.jpg" />
-          <CategoryCard title="SEGURIDAD" href="/productos/seguridad" imageSrc="/equipamiento-y-seguridad.jpg" />
+          <CategoryCard title="CALZADO" href="/minorista?category=calzados" imageSrc="/portada-calzado.jpg" />
+          <CategoryCard title="INDUMENTARIA DE TRABAJO" href="/minorista?category=trabajo" imageSrc="/portada-ropa.jpg" />
+          <CategoryCard title="ACCESORIOS Y SEGURIDAD" href="/minorista?category=seguridad" imageSrc="/portada-seguridad.jpg" />
+          <CategoryCard title="VER TODOS" href="/minorista" imageSrc="/PORTADA-VER-TODOS.jpg" />
         </div>
       </section>
 
@@ -57,7 +57,7 @@ export default function Home() {
               className="object-contain"
             />
           </div>
-          <div className="bg-background p-6 rounded-lg shadow-sm">
+          {/* <div className="bg-background p-6 rounded-lg shadow-sm">
             <Image
               src="/placeholder.svg?height=100&width=200"
               alt="SANTISTA"
@@ -74,18 +74,29 @@ export default function Home() {
               height={75}
               className="object-contain"
             />
-          </div>
+          </div> */}
         </div>
       </section>
 
       {/* Locations Section */}
       <section className="container">
-        <h2 className="text-3xl font-bold tracking-tighter mb-8">¿DONDE ESTAMOS?</h2>
+        <h2 className="text-3xl font-bold tracking-tighter mb-8">¿DÓNDE ESTAMOS?</h2>
         <div className="grid gap-6 md:grid-cols-2">
-          <LocationCard title="SUCURSAL CORDOBA" address="Corrientes 473, Centro, X5000ANI Córdoba" />
-          <LocationCard title="SUCURSAL RIO CUARTO" address="Corrientes 473, Centro, X5000ANI" />
+          <LocationCard
+            title="SUCURSAL CÓRDOBA"
+            address="Corrientes 473, Centro, X5000ANI Córdoba"
+            phone="351-3804567"
+            mapsUrl="https://maps.app.goo.gl/w7K5brAgAg2X8x3s6"
+          />
+          <LocationCard
+            title="SUCURSAL VILLA MARÍA"
+            address="José Ingenieros 340, X5900 Villa María, Córdoba"
+            phone="353-4534674"
+            mapsUrl="https://maps.app.goo.gl/QCXA5aCAJfCg52Xv8"
+          />
         </div>
       </section>
+
     </div>
   )
 }
@@ -110,22 +121,58 @@ function CategoryCard({ title, href, imageSrc }: { title: string; href: string; 
   )
 }
 
-function LocationCard({ title, address }: { title: string; address: string }) {
+// function LocationCard({ title, address }: { title: string; address: string }) {
+//   return (
+//     <Card>
+//       <CardContent className="p-6">
+//         <h3 className="text-xl font-semibold mb-4">{title}</h3>
+//         <div className="flex items-start gap-2 mb-4">
+//           <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
+//           <p className="text-muted-foreground">{address}</p>
+//         </div>
+//         <div className="flex items-center gap-2 mb-6">
+//           <Phone className="h-5 w-5 text-muted-foreground" />
+//           <p className="text-muted-foreground">351-3804567</p>
+//         </div>
+//         <Button variant="outline" className="w-full">
+//           ¿COMO LLEGAR?
+//         </Button>
+//       </CardContent>
+//     </Card>
+//   )
+// }
+
+function LocationCard({
+  title,
+  address,
+  phone,
+  mapsUrl,
+}: {
+  title: string
+  address: string
+  phone: string
+  mapsUrl: string
+}) {
   return (
     <Card>
       <CardContent className="p-6">
         <h3 className="text-xl font-semibold mb-4">{title}</h3>
+
         <div className="flex items-start gap-2 mb-4">
           <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
           <p className="text-muted-foreground">{address}</p>
         </div>
+
         <div className="flex items-center gap-2 mb-6">
           <Phone className="h-5 w-5 text-muted-foreground" />
-          <p className="text-muted-foreground">351-3804567</p>
+          <p className="text-muted-foreground">{phone}</p>
         </div>
-        <Button variant="outline" className="w-full">
-          ¿COMO LLEGAR?
-        </Button>
+
+        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+          <Button variant="outline" className="w-full">
+            ¿CÓMO LLEGAR?
+          </Button>
+        </a>
       </CardContent>
     </Card>
   )

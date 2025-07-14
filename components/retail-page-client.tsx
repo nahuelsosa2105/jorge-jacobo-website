@@ -11,6 +11,7 @@ import { ProductFilters } from "@/components/product-filters"
 import { getProducts, getAllBrands, getAllSizes } from "@/lib/products"
 import type { ProductCategory, ProductFilter } from "@/app/types/products"
 import { MobileFilters } from "@/components/mobile-filters"
+import { MapPin, Phone } from "lucide-react"
 
 const categories: { id: ProductCategory; name: string }[] = [
   { id: "calzados", name: "CALZADOS" },
@@ -81,38 +82,57 @@ export default function RetailPageClient() {
         <div className="space-y-8">
           {isLoading ? <ProductsGridSkeleton /> : <ClientProductsGrid filters={filters} page={page} sort={sort} />}
 
-          <section className="mt-12 sm:mt-16">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-8">NUESTRAS MARCAS</h2>
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-8">
-              {staticBrands.map((brand) => (
-                <div key={brand.id} className="bg-muted p-4 sm:p-6 rounded-lg">
-                  <Image
-                    src={brand.image}
-                    alt={brand.name}
-                    width={120}
-                    height={60}
-                    className="object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-          </section>
+          <section className="container bg-muted py-12 rounded-lg">
+                  <h2 className="text-3xl font-bold tracking-tighter text-center mb-12">NUESTRAS MARCAS</h2>
+                  <div className="flex flex-wrap justify-center gap-12">
+                    <div className="bg-background p-6 rounded-lg shadow-sm">
+                      <Image
+                        src="/ombu-logo.jpg"
+                        alt="OMBU"
+                        width={150}
+                        height={75}
+                        className="object-contain"
+                      />
+                    </div>
+                    {/* <div className="bg-background p-6 rounded-lg shadow-sm">
+                      <Image
+                        src="/placeholder.svg?height=100&width=200"
+                        alt="SANTISTA"
+                        width={150}
+                        height={75}
+                        className="object-contain"
+                      />
+                    </div>
+                    <div className="bg-background p-6 rounded-lg shadow-sm">
+                      <Image
+                        src="/placeholder.svg?height=100&width=200"
+                        alt="INTI"
+                        width={150}
+                        height={75}
+                        className="object-contain"
+                      />
+                    </div> */}
+                  </div>
+                </section>
 
           <section className="mt-12 sm:mt-16">
             <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-8">NUESTRAS TIENDAS</h2>
             <div className="grid gap-6 md:grid-cols-2">
               <StoreCard
-                title="SUCURSAL CORDOBA"
+                title="SUCURSAL CÓRDOBA"
                 address="Corrientes 473, Centro, X5000ANI Córdoba"
-                image="/placeholder.svg?height=400&width=600"
+                phone="351-3804567"
+                mapsUrl="https://maps.app.goo.gl/w7K5brAgAg2X8x3s6"
               />
               <StoreCard
-                title="SUCURSAL RIO CUARTO"
-                address="Corrientes 473, Centro, X5000ANI"
-                image="/placeholder.svg?height=400&width=600"
+                title="SUCURSAL VILLA MARÍA"
+                address="José Ingenieros 340, X5900 Villa María, Córdoba"
+                phone="353-4534674"
+                mapsUrl="https://maps.app.goo.gl/QCXA5aCAJfCg52Xv8"
               />
             </div>
           </section>
+
         </div>
       </div>
     </div>
@@ -204,9 +224,8 @@ function ClientProductsGrid({
                 <a
                   key={i}
                   href={url.toString()}
-                  className={`px-3 sm:px-4 py-2 rounded text-sm sm:text-base ${
-                    page === i + 1 ? "bg-primary text-primary-foreground" : "bg-muted"
-                  }`}
+                  className={`px-3 sm:px-4 py-2 rounded text-sm sm:text-base ${page === i + 1 ? "bg-primary text-primary-foreground" : "bg-muted"
+                    }`}
                 >
                   {i + 1}
                 </a>
@@ -219,16 +238,37 @@ function ClientProductsGrid({
   )
 }
 
-function StoreCard({ title, address, image }: { title: string; address: string; image: string }) {
+function StoreCard({
+  title,
+  address,
+  phone,
+  mapsUrl,
+}: {
+  title: string
+  address: string
+  phone: string
+  mapsUrl: string
+}) {
   return (
     <Card>
-      <CardContent className="p-4 sm:p-6">
-        <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">{title}</h3>
-        <p className="text-muted-foreground mb-3 sm:mb-4">{address}</p>
-        <div className="relative h-40 sm:h-48 rounded-lg overflow-hidden mb-3 sm:mb-4">
-          <Image src={image} alt={`Mapa ${title}`} fill className="object-cover" />
+      <CardContent className="p-6">
+        <h3 className="text-xl font-semibold mb-4">{title}</h3>
+
+        <div className="flex items-start gap-2 mb-4">
+          <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
+          <p className="text-muted-foreground">{address}</p>
         </div>
-        <Button variant="outline" className="w-full">¿COMO LLEGAR?</Button>
+
+        <div className="flex items-center gap-2 mb-6">
+          <Phone className="h-5 w-5 text-muted-foreground" />
+          <p className="text-muted-foreground">{phone}</p>
+        </div>
+
+        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+          <Button variant="outline" className="w-full">
+            ¿CÓMO LLEGAR?
+          </Button>
+        </a>
       </CardContent>
     </Card>
   )

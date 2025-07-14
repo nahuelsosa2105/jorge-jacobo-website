@@ -1,4 +1,7 @@
 import Image from "next/image"
+import { MapPin, Phone } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 
 export default function AboutPage() {
   return (
@@ -75,7 +78,65 @@ export default function AboutPage() {
           </div> */}
         </div>
       </div>
+
+      <section className="mt-12 sm:mt-16">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-8">NUESTRAS TIENDAS</h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              <StoreCard
+                title="SUCURSAL CÓRDOBA"
+                address="Corrientes 473, Centro, X5000ANI Córdoba"
+                phone="351-3804567"
+                mapsUrl="https://maps.app.goo.gl/w7K5brAgAg2X8x3s6"
+              />
+              <StoreCard
+                title="SUCURSAL VILLA MARÍA"
+                address="José Ingenieros 340, X5900 Villa María, Córdoba"
+                phone="353-4534674"
+                mapsUrl="https://maps.app.goo.gl/QCXA5aCAJfCg52Xv8"
+              />
+            </div>
+          </section>
+
     </div>
   )
+
+function StoreCard({
+  title,
+  address,
+  phone,
+  mapsUrl,
+}: {
+  title: string
+  address: string
+  phone: string
+  mapsUrl: string
+}) {
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <h3 className="text-xl font-semibold mb-4">{title}</h3>
+
+        <div className="flex items-start gap-2 mb-4">
+          <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
+          <p className="text-muted-foreground">{address}</p>
+        </div>
+
+        <div className="flex items-center gap-2 mb-6">
+          <Phone className="h-5 w-5 text-muted-foreground" />
+          <p className="text-muted-foreground">{phone}</p>
+        </div>
+
+        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+          <Button variant="outline" className="w-full">
+            ¿CÓMO LLEGAR?
+          </Button>
+        </a>
+      </CardContent>
+    </Card>
+  )
+}
+
+
+
 }
 
